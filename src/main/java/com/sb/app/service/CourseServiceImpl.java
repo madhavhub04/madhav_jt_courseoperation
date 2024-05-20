@@ -5,9 +5,14 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sb.app.dto.CourseRequestDTO;
 import com.sb.app.dto.CourseResponseDTO;
 import com.sb.app.entity.Course;
@@ -21,16 +26,23 @@ public class CourseServiceImpl{
 	@Autowired
 	private CourseRepository courseRepository;
 	
+	private static final Logger logger = LoggerFactory.getLogger(CourseServiceImpl.class);
+	
 	public CourseResponseDTO onboardNewCourse(CourseRequestDTO courseRequestDTO) {
 		
 		Course course = AppUtils.mapDTOToEntity(courseRequestDTO);
+		Course entity=null;
+		logger.info("-----===>[courseService :: onboardNewCourse() started");
 		try {
-			Course entity = courseRepository.save(course);
-
+			logger.debug("courseService :: onboardNewCourse() request to db save obj");
+			entity = courseRepository.save(course);
+			logger.debug("courseService :: onboardNewCourse() response");
 			CourseResponseDTO courseResponseDTO = AppUtils.mapEntityToDTO(entity);
 			courseResponseDTO.setCourseUniqueCode(UUID.randomUUID().toString().split("-")[0]);
+			logger.info("-----===>[courseService :: onboardNewCourse() ended");
 			return courseResponseDTO;
 		} catch (Exception exception) {
+			logger.error("courseService :: onboardNewCourse() ");
 			throw new CourseServiceBusinessException(" onboardNewCourse  server method failed..");
 		}
 	}
@@ -77,5 +89,16 @@ public class CourseServiceImpl{
 		} catch (Exception exception) {
 			throw new CourseServiceBusinessException(" updateCourse  server method failed..");
 		}
-	}		
+	}	
+	
+	public static String convertObjectToJson(Object object) {
+		try {
+			return new ObjectMapper().writeValueAsString(object);
+		} catch (JsonProcessingException e) {
+			
+		}
+		return null;
+	}
+	
+	
 }

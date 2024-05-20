@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +30,8 @@ public class CourseController {
 
 //	@Autowired
 	private CourseServiceImpl courseServiceImpl;
+	
+	private static final Logger logger = LoggerFactory.getLogger(CourseController.class);
 	
 	public CourseController(CourseServiceImpl courseServiceImpl) {
 		this.courseServiceImpl=courseServiceImpl;
@@ -67,6 +71,17 @@ public class CourseController {
 		CourseResponseDTO courseResponseDTO = courseServiceImpl.updateCourse(courRequestDTO, courseId);
 		return new  ServiceResponse<CourseResponseDTO>(HttpStatus.OK,courseResponseDTO);
 	}
+	
+	/*
+	 * @GetMapping("/log") public String setLogging() {
+	 * 
+	 * logger.trace("this is TRACE message");
+	 * logger.debug("this is DEBUG messsage"); 
+	 * logger.info("this is INFO message");
+	 * logger.warn("this  is WARN message"); 
+	 * logger.error("this is ERROR message");
+	 * return "logger successfully getting..."; }
+	 */
 	
 	
 }
