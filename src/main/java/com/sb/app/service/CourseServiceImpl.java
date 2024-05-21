@@ -77,8 +77,9 @@ public class CourseServiceImpl{
 		courseRepository.deleteById(courseId);
 	}catch (Exception e) {
 		logger.error("courseServiceimpl::deleteById() exception occur while deleting by id");
-		// TODO: handle exception
+		throw new CourseServiceBusinessException("deleteById server method  by id "+e.getMessage());
 	}
+		logger.info("courseService::deleteById() ended");
 }	
 	
 	public CourseResponseDTO updateCourse(CourseRequestDTO courseRequestDTO, Integer courseId) {
