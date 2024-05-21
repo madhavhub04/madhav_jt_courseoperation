@@ -34,11 +34,12 @@ public class CourseServiceImpl{
 		Course entity=null;
 		logger.info("-----===>[courseService :: onboardNewCourse() started");
 		try {
-			logger.debug("courseService :: onboardNewCourse() request to db save obj");
+			logger.info("courseService :: onboardNewCourse() request to db save obj");
 			entity = courseRepository.save(course);
 			logger.debug("courseService :: onboardNewCourse() response");
 			CourseResponseDTO courseResponseDTO = AppUtils.mapEntityToDTO(entity);
 			courseResponseDTO.setCourseUniqueCode(UUID.randomUUID().toString().split("-")[0]);
+			logger.debug("courseService :: onboardNewCourse() response {}",AppUtils.convertObjectToJson(courseResponseDTO));
 			logger.info("-----===>[courseService :: onboardNewCourse() ended");
 			return courseResponseDTO;
 		} catch (Exception exception) {
@@ -70,8 +71,15 @@ public class CourseServiceImpl{
 	}
 	
 	public void deleteById(Integer courseId) {
+		logger.info("courseServiceimpl:: deleteById() started");
+		try {
+			logger.debug("courseServiceimpl:: deleteById() input {}",courseId);
 		courseRepository.deleteById(courseId);
+	}catch (Exception e) {
+		logger.error("courseServiceimpl::deleteById() exception occur while deleting by id");
+		// TODO: handle exception
 	}
+}	
 	
 	public CourseResponseDTO updateCourse(CourseRequestDTO courseRequestDTO, Integer courseId) {
 		try {
@@ -91,14 +99,6 @@ public class CourseServiceImpl{
 		}
 	}	
 	
-	public static String convertObjectToJson(Object object) {
-		try {
-			return new ObjectMapper().writeValueAsString(object);
-		} catch (JsonProcessingException e) {
-			
-		}
-		return null;
-	}
 	
 	
 }

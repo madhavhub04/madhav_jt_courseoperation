@@ -1,5 +1,7 @@
 package com.sb.app.util;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sb.app.dto.CourseRequestDTO;
 import com.sb.app.dto.CourseResponseDTO;
 import com.sb.app.entity.Course;
@@ -37,4 +39,13 @@ public class AppUtils {
 		
 	}
 
+	public static String convertObjectToJson(Object object) {
+		try {
+			return new ObjectMapper().writeValueAsString(object);
+		} catch (JsonProcessingException e) {
+			
+		}
+		return null;
+	}
+	
 }
